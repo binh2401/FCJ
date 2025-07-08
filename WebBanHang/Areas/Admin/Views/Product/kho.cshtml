@@ -1,0 +1,45 @@
+﻿@model IEnumerable<WebBanHang.Models.Product>
+@{
+    var uniqueCategories = Model.Select(p => p.Category?.Name).Where(name => !string.IsNullOrEmpty(name)).Distinct();
+    Layout = "_AdminLayout";
+}
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4">
+            <h2>Quản lý kho</h2>
+            <table class="table">
+
+                <thead>
+                    <tr>
+                        <th>Tên sản phẩm</th>
+                        <th>Tác giả</th>
+                        <th>Giá</th>
+                        <th>Số lượng bán ra</th>
+                        <th>Số lượn tồn kho</th>
+                        <th>Hình ảnh</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model)
+                    {
+                        <tr>
+                            <td>@product.Name</td>
+                            <td>@product.author</td>
+                            <td>@product.Price</td>
+                            <td>@product.SoLuongBanRa</td>
+                            <td>@product.LuongTonKho</td>
+                            <td><img src="@product.ImageUrl" style="max-width:200px;" /></td>
+                            <td>
+
+
+
+                                <a class="btn btn-primary" asp-action="Update" asp-route-id="@product.Id">Cập nhập số lượng</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>

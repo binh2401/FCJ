@@ -1,0 +1,58 @@
+﻿@model IEnumerable<WebBanHang.Models.Order>
+
+@{
+    ViewData["Title"] = "Đơn hàng của tôi";
+}
+
+<h1>Đơn hàng của tôi</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <p>Mã đơn hàng</p>
+            </th>
+            <th>
+                <p>Tên người nhận</p>
+            </th>
+            <th>
+               <p>Địa chỉ giao Hàng</p>
+            </th>
+            <th>
+              <p>Nội dung</p>
+            </th>
+            <th>
+             <p>Gía tiền</p>
+            </th>
+            <th>
+            <p>Tình trạng đơn hàng</p>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShippingAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Notes)
+                </td>
+                <td>
+                    @item.TotalPrice.ToString("#,##0") VNĐ
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

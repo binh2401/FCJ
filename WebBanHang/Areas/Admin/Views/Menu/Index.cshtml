@@ -1,0 +1,46 @@
+﻿@model IEnumerable<WebBanHang.Models.Menu>
+
+
+@{
+    ViewData["Title"] = "Menus";
+    Layout = "_AdminLayout";
+}
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4">
+<h2>Thể loại lớn</h2>
+
+<p>
+    <a class="nav-link text-dark" asp-area="Admin" asp-controller="Menu" asp-action="Add">Thêm thể loại lớn</a>
+  
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+              <p>Tên thể loại tổng</p>
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                                <a class="btn btn-primary" asp-action="Update" asp-route-id="@item.Id">Sửa</a> |
+                                <a class="btn btn-primary" asp-action="Delete" asp-route-id="@item.Id">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+</main>
+</div>

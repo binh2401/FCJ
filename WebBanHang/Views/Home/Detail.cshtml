@@ -1,0 +1,135 @@
+﻿@model WebBanHang.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+}
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-5 col-md-5 col-sm-6">
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <div class="white-box text-center"><img src="@Model.ImageUrl" width="430px" height="600px" class="img-responsive"></div>
+                    }
+                </div>
+                <div class="col-lg-7 col-md-7 col-sm-6">
+                    <h4 class="box-title mt-5">@Model.Name</h4>
+                    <p>@Model.Description</p>
+                    <h2 class="mt-5">
+                        @Model.Price.ToString("#,##0") VNĐ<small class="text-success"></small>
+                    </h2>
+                    @if(Model.LuongTonKho>0){
+                    <form asp-controller="ShoppingCart" asp-action="AddToCart" method="post">
+                        <input type="hidden" name="productId" value="@Model.Id" />
+                        <label for="quantity">Số lượng:</label>
+                        <input type="number" id="quantity" name="quantity" value="1" min="1" max="@Model.LuongTonKho" />
+                        <button class="btn btn-dark btn-rounded mr-1" data-toggle="tooltip" title="" data-original-title="Add to cart">
+                           Thêm vào giỏ hàng
+                        </button>
+                    </form>
+                    }else{
+                        <h3>Tạm hết hàng</h3>
+                    }
+
+                    hàng còn   <span id="totalLikes">@Model.LuongTonKho</span>
+                    <h3 class="box-title mt-5"></h3>
+                    <ul class="list-unstyled">
+                        <li><i class="fa fa-check text-success"></i>Tác giả: @Model.author </li>
+                        <li><i class="fa fa-check text-success"></i>Loại sản phẩm: @Model.Category.Name</li>
+                        <li><i class="fa fa-check text-success"></i>Tổng like: @Model.TotalLikes</li>
+                        
+                    </ul>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <h3 class="box-title mt-5">Thông tin sách</h3>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-product">
+                            <tbody>
+                                <tr>
+                                    <td width="390">Công ty phát hành</td>
+                                    <td>@Model.congtyphathanh</td>
+                                </tr>
+                                <tr>
+                                    <td>Loại bìa</td>
+                                    <td>@Model.loaibia</td>
+                                </tr>
+                                <tr>
+                                    <td>Số trang</td>
+                                    <td>@Model.sotrang</td>
+                                </tr>
+                                <tr>
+                                    <td>Nhà sản xuất</td>
+                                    <td>@Model.nhasanxuat</td>
+                                </tr>
+                               
+                              
+                    </div>
+                 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <h3>Tổng đánh giá:  @Model.AverageRating.ToString("0.0")</h3>
+  
+    <span class="font-size-30 text-warning">
+        @{
+            int starCount = (int)Model.AverageRating; // Lấy phần nguyên của AverageRating để xác định số lượng sao nguyên
+            double remainder = @Model.AverageRating - starCount; // Lấy phần dư để xác định có cần thêm sao nữa hay không
+        }
+
+        @for (int i = 0; i < starCount; i++)
+        {
+            <i class="fa fa-star"></i> <!-- Hiển thị sao đầy -->
+        }
+
+        @if (remainder >= 0.5) // Nếu phần dư lớn hơn hoặc bằng 0.5, hiển thị một sao nửa
+        {
+            <i class="fa fa-star-half"></i>
+            starCount++; // Tăng số lượng sao nguyên để tránh hiển thị quá nhiều sao
+        }
+
+        @for (int i = starCount; i < 5; i++) // Duyệt qua số sao còn thiếu và hiển thị sao trống
+        {
+            <i class="fa fa-star-o"></i>
+        }
+    </span>
+    <h3>Đánh giá</h3>
+
+  
+    @foreach (var review in ViewBag.Reviews)
+    {
+        <div>
+            <p>@review.name: @Html.Raw(string.Concat(Enumerable.Repeat("<i class=\"bi bi-star-fill\"></i>", review.Rating)))</p>
+            <p>Comment: @review.ReviewText</p>
+        </div>
+    }
+    <h3></h3>
+    <form action="@Url.Action("AddReview", "Home")" method="post">
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <label for="starRating">Đánh giá sao:</label>
+            <div class="star-rating">
+                <input type="radio" id="star5" name="Rating" value="1" /><label for="star1" title="1 sao">1<i class="bi bi-star-fill"></i></label>
+                <input type="radio" id="star4" name="Rating" value="2" /><label for="star2" title="2 sao">2 <i class="bi bi-star-fill"></i></label>
+                <input type="radio" id="star3" name="Rating" value="3" /><label for="star3" title="3 sao">3 <i class="bi bi-star-fill"></i></label>
+                <input type="radio" id="star2" name="Rating" value="4" /><label for="star4" title="4 sao">4 <i class="bi bi-star-fill"></i></label>
+                <input type="radio" id="star1" name="Rating" value="5" /><label for="star5" title="5 sao">5 <i class="bi bi-star-fill"></i></label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="reviewText">Comment:</label>
+            <textarea id="reviewText" name="reviewText" class="form-control" rows="4" required></textarea>
+        </div>
+
+        <input type="hidden" name="productId" value="@Model.Id" />
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    </div>
+
+

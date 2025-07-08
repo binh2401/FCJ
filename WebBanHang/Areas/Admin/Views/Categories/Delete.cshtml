@@ -1,0 +1,16 @@
+﻿@model WebBanHang.Models.Category
+@{
+    Layout = "_AdminLayout";
+}
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4">
+<h2>Xóa thể loại</h2>
+<form asp-controller="Categories" asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="Id" />
+    <p>Bạn có chắc là xóa chứ: @Model.Name?</p>
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>
+</div>
+</main>
+</div>
